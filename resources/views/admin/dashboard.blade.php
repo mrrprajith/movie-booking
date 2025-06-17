@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h1>Admin Dashboard</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 px-4">
+        Admin Dashboard
+    </h1>
 
     @foreach ($shows as $show)
     <div class="card mb-4">

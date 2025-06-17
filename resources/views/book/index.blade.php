@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Book Your Movie Tickets</h1>
+<div class="container py-4">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Book Your Movie Tickets</h1>
 
     <!-- Show selector -->
-    <form id="showForm" method="GET" action="{{ route('book') }}">
-        <div class="mb-3">
+    <form id="showForm" method="GET" action="{{ route('book') }}" class="mb-4">
+        <div class="mb-3" style="max-width: 300px;">
             <label for="show_id" class="form-label">Select Show:</label>
             <select name="show_id" id="show_id" class="form-select" required>
                 <option value="">-- Choose a Show --</option>
@@ -21,10 +21,11 @@
     </form>
 
     @if ($selectedShow)
-    <h3>Seats for {{ $selectedShow->show_date }} at {{ $selectedShow->show_time }}</h3>
-    <div id="seat-container" class="mb-3">
+    <h3 class="mb-3">Seats for {{ $selectedShow->show_date }} at {{ $selectedShow->show_time }}</h3>
+
+    <div id="seat-container" class="mb-4">
         @foreach ($seats as $seat)
-        <button class="btn btn-outline-primary seat-btn mb-2" data-id="{{ $seat->id }}" id="seat-{{ $seat->id }}">
+        <button class="btn btn-outline-primary seat-btn mb-2 me-2" data-id="{{ $seat->id }}" id="seat-{{ $seat->id }}">
             {{ $seat->seat_number }}
         </button>
         @endforeach
