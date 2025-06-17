@@ -44,13 +44,13 @@
                 @endforeach
             </ul>
 
-<form method="POST" action="{{ route('admin.resetBookings', $show->id) }}" onsubmit="return confirm('Are you sure you want to reset all bookings for this show?');">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-danger btn-sm mt-2">
-        Reset Bookings
-    </button>
-</form>
+            <form method="POST" action="{{ route('admin.resetBookings', $show->id) }}" onsubmit="return confirm('Are you sure you want to reset all bookings for this show?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm mt-2">
+                    Reset Bookings
+                </button>
+            </form>
         </div>
     </div>
     @endforeach
