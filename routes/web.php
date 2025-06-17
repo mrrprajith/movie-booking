@@ -1,0 +1,39 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->is_admin
+        ? redirect('/admin/dashboard')
+        : redirect('/dashboard');
+    }
+    return redirect('/login');
+});
+
+require __DIR__.'/auth.php';
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', function () {
+        abort_if(auth()->user()->is_admin, 403, 'Admins must use /admin/dashboard');
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/book', [BookingController::class, 'index'])->name('book');
+    Route::post('/book', [BookingController::class, 'store']);
+});
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+    
+});
+
+Route::get('/api/seats/{show}', [BookingController::class, 'getSeats']);
