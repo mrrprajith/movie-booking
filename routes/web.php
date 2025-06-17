@@ -9,7 +9,7 @@ Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->is_admin
         ? redirect('/admin/dashboard')
-        : redirect('/dashboard');
+        : redirect('/book');
     }
     return redirect('/login');
 });
@@ -19,8 +19,10 @@ require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', function () {
-        abort_if(auth()->user()->is_admin, 403, 'Admins must use /admin/dashboard');
-        return view('dashboard');
+        if (auth()->user()->is_admin) {
+            return redirect('/admin/dashboard');
+        }
+        return redirect('/book'); 
     })->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
