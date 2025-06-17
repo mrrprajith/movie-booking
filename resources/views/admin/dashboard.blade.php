@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
+<div class="container py-4">
     <h1 class="text-3xl font-bold text-gray-800 mb-6 px-4">
         Admin Dashboard
     </h1>
@@ -12,23 +12,33 @@
             <strong>Show:</strong> {{ $show->show_date }} at {{ $show->show_time }}
         </div>
         <div class="card-body">
-            <p><strong>Total Seats:</strong> {{ $show->seats->count() }}</p>
-            <p><strong>Booked Seats:</strong>
-                {{ $show->seats->filter(fn($seat) => $seat->bookingSeats->count() > 0)->count() }}
-            </p>
-            <p><strong>Available Seats:</strong>
-                {{ $show->seats->filter(fn($seat) => $seat->bookingSeats->count() === 0)->count() }}
-            </p>
+            <div class="row text-center mb-4">
+                <div class="col border p-3">
+                    <strong>Total Seats</strong><br>
+                    {{ $show->seats->count() }}
+                </div>
+                <div class="col border p-3">
+                    <strong>Booked Seats</strong><br>
+                    {{ $show->seats->filter(fn($seat) => $seat->bookingSeats->count() > 0)->count() }}
+                </div>
+                <div class="col border p-3">
+                    <strong>Available Seats</strong><br>
+                    {{ $show->seats->filter(fn($seat) => $seat->bookingSeats->count() === 0)->count() }}
+                </div>
+            </div>
 
-            <h5 class="text-xl font-bold text-indigo-600">Bookings:</h5>
-            <ul>
+            <h5 class="text-xl font-bold text-indigo-600 mb-3">Bookings:</h5>
+
+            <ul class="list-unstyled">
                 @foreach ($show->seats->where('bookingSeats', '!=', [])->groupBy(function($seat) {
                 return $seat->bookingSeats->first()->booking->user->name ?? 'Unknown';
                 }) as $userName => $seatsByUser)
-                <li>
-                    <strong>{{ $userName }}</strong>:
+                <li class="mb-2">
+                    <strong>{{ $userName !== 'Unknown' ? $userName : 'Unassigned Booking' }}</strong>:
                     @foreach ($seatsByUser as $seat)
-                    {{ $seat->seat_number }}{{ !$loop->last ? ',' : '' }}
+                    <span class="badge bg-secondary me-1 mb-1">
+                    {{ $seat->seat_number }}
+                    </span>
                     @endforeach
                 </li>
                 @endforeach
