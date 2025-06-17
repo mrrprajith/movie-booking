@@ -19,10 +19,8 @@ require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', function () {
-        if (auth()->user()->is_admin) {
-            return redirect('/admin/dashboard');
-        }
-        return redirect('/book'); 
+        abort_if(auth()->user()->is_admin, 403, 'Admins must use /admin/dashboard');
+        return view('dashboard');
     })->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
