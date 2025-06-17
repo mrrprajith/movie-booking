@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
-    
+    Route::delete('/reset-bookings/{show}', [AdminController::class, 'resetBookings'])->name('admin.resetBookings');
 });
 
 Route::get('/api/seats/{show}', [BookingController::class, 'getSeats']);

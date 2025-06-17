@@ -17,4 +17,12 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact('shows'));
     }
+
+    public function resetBookings(Show $show) {
+        foreach ($show->seats as $seat) {
+            $seat->bookingSeats()->delete();
+        }
+
+        return back()->with('status', 'All bookings for this show have been reset.');
+    }
 }
